@@ -32,7 +32,7 @@ def show_banner():
     
     console.print(banner_panel)
 
-
+# ======================================================================================
 
 def output_dir(file_name,type="video"):
 
@@ -48,12 +48,14 @@ def output_dir(file_name,type="video"):
 
     return file_full_path
 
-
+# ======================================================================================
 
 def get_re_patterens (user_input):
     result=re.findall(r"[1-3]",user_input)
     result=set(result)
     return result
+
+# ======================================================================================
 
 def tqdm_hook(status):
     if status['status'] == 'downloading':
@@ -86,11 +88,14 @@ def tqdm_hook(status):
             tqdm_hook.bar.close()
             del tqdm_hook.bar
         print(f"\n✅ Finished downloading: {status['filename']}")
+        rprint("[yellow bold]Finalizing your download… Hang tight!")
 
 class MyLogger:
     def debug(self, msg): pass
     def warning(self, msg): pass
     def error(self, msg): print(f"❌ Error: {msg}")
+
+# ======================================================================================
 
 def get_available_qualities(video_url,advanced=False):
     yt_dlp_opts = {
@@ -148,7 +153,6 @@ def get_available_qualities(video_url,advanced=False):
 
     return reslution_dict,audio_sizes
 
-
 # ======================================================================================
 
 def clear_empty_data(wanted_dict):
@@ -163,8 +167,6 @@ def clear_empty_data(wanted_dict):
     return wanted_dict
 
 # ======================================================================================
-
-
 
 def print_available_qualities(resolution_dict : dict, audio_sizes : list):
     console = Console()
@@ -181,7 +183,6 @@ def print_available_qualities(resolution_dict : dict, audio_sizes : list):
                 header_style="#7588ef",
                 border_style="#b8b4ad",
                 )
-
 
     try:
         if resolution_dict:
@@ -203,14 +204,14 @@ def print_available_qualities(resolution_dict : dict, audio_sizes : list):
         rprint(f"[red]An error occurred while getting available qualities[/], Try again and it will work fine")
         rprint("[yellow]Exiting...")
         exit(0)
-        
-    
+
     else:
         
         console.print(table)
         return numbered_resolutions_dict
         
 # ======================================================================================
+
 # download_video Function
 def download_video(video_url,
                     wanted_quality=False,
@@ -270,11 +271,12 @@ def download_video(video_url,
     with yt_dlp.YoutubeDL(yt_dlp_opts) as ydl:
         try:
             ydl.download([video_url])
-            print("Download Completed Successfully!")
+            rprint("[green]Download Completed Successfully!")
         except Exception as e:
             print(f"An error occurred during download: {e}")
 
 # ======================================================================================
+
 def download_audio(video_url,
                     subtitle=False,
                     donwload_thumbnail=False,
@@ -319,7 +321,6 @@ def download_audio(video_url,
 
     ],
 
-
         # optional arguments
         # "embedsubtitles":subtitle,
         # "writesubtitles":subtitle,
@@ -327,11 +328,10 @@ def download_audio(video_url,
         "subtitleslangs":["ar","en"] if subtitle else [],
     }
 
-
     with yt_dlp.YoutubeDL(yt_dlp_opts) as ydl:
         try:
             ydl.download([video_url])
-            print("Download Completed Successfully!")
+            rprint("[green]Download Completed Successfully!")
         except Exception as e:
             print(f"An error occurred during download: {e}")
 
@@ -353,7 +353,6 @@ def draw_video_settings_table():
     v_settings_table.add_row("3","🗂️  Download Meta Data")
 
     rprint(v_settings_table)
-
 
 def draw_audio_settings_table():
     v_settings_table=Table(
@@ -485,8 +484,16 @@ def main():
 # ======================================================================================
 
 if "__main__" == __name__:
+    
     show_banner()
-    main()
+    while True :
+        main()
+        rprint("Do You Want To Download Another File [y/N]")
+        menu_choose=input("=>")
+        if menu_choose.strip().lower() == "y":
+            main()        
+        else:
+            break
 
 
 
