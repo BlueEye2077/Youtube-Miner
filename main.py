@@ -1,4 +1,4 @@
-import yt_dlp ;
+import yt_dlp 
 from tqdm import tqdm
 import re 
 from rich.console import Console
