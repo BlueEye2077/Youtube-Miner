@@ -484,15 +484,23 @@ def main():
 # ======================================================================================
 
 if "__main__" == __name__:
-    
     show_banner()
-    while True :
-        main()
-        rprint("Do You Want To Download Another File [y/N]")
-        menu_choose=input("=>")
-        if menu_choose.strip().lower() == "y":
-            main()        
-        else:
+    while True:
+        try:
+            main()
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        except KeyboardInterrupt:
+            print("\nProcess interrupted by user.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number for quality selection.")
+        except IndexError:
+            print("Selected quality is out of range. Please select a valid quality number.")
+        
+        rprint("[cyan]Do You Want To Download Another File (y/N)[/]:")
+        menu_choose = input("=> ").strip().lower()
+        if menu_choose != "y":
+            rprint("[yellow]Thank you for using YouTube Downloader! Goodbye![/]")
             break
 
 
